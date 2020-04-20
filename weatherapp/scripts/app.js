@@ -3,6 +3,8 @@
 const cityForm = document.querySelector('form'); //beause we have only one form anyway
 const card = document.querySelector('.card');
 const details = document.querySelector('.details');
+const time = document.querySelector('img.time');
+const icon = document.querySelector('.icon img');
 
 const updateCity = async (city) => {
     const cityDetails = await getCity(city);
@@ -18,6 +20,8 @@ const updateUI = data => {
     const cityDetails = data.cityDetails;
     const weather = data.weather;
 
+    console.log(weather);
+
     //update details template
     details.innerHTML = `
         <h5 class="my-3">${cityDetails.EnglishName}</h5>
@@ -27,6 +31,23 @@ const updateUI = data => {
             <span>&deg;C</span>
         </div>
     `;
+
+    //update night, day, icon images
+    const iconSrc = `img/icons/${weather.WeatherIcon}.svg`;
+    icon.setAttribute('src', iconSrc);
+
+    let timeSrc = null;
+    if(weather.IsDayTime) {
+        timeSrc = 'img/day.jpg';
+    } else {
+        timeSrc = 'img/night.jpg';
+    }
+    time.setAttribute('src', timeSrc);
+
+    //remove d-none class if present
+    if(card.classList.contains('d-none')) {
+        card.classList.remove('d-none');
+    }
 };
 
 cityForm.addEventListener('submit', e => {
